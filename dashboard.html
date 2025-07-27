@@ -3,32 +3,45 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard | Mutualan TikTok</title>
+    <title>Dashboard | Saling Follow TikTok</title>
 
+    <!-- Link ke font Inter dari Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        /* Mengatur font Inter sebagai font default */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
         /* Style untuk tombol filter aktif */
         .filter-btn-active {
-            background-color: #3b82f6; /* bg-blue-600 */
+            background-color: #0d9488; /* bg-teal-600 */
             color: white;
-            font-weight: 700;
+            font-weight: 600; /* font-semibold */
         }
     </style>
-
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gradient-to-br from-gray-950 to-blue-950 min-h-screen">
 
-    <nav class="bg-white shadow-md sticky top-0 z-50">
+    <nav class="bg-gray-900/50 shadow-xl backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold text-gray-800">👥 Mutualan TikTok</h1>
+            <h1 class="text-xl font-bold text-gray-50 flex items-center gap-2">
+                <!-- TikTok Logo SVG -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                  class="h-6 w-6"
+                  fill="#FFFFFF"
+                >
+                  <path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V276a162.6 162.6 0 1 0 101.5 142.4V224.1c4.5 7.4 9.1 15.2 13.6 23.4l5.3 9.7L448 209.9z"/>
+                </svg>
+                Saling Follow TikTok
+            </h1>
             <div id="navUserSection" class="text-sm flex flex-wrap gap-2 items-center">
-                </div>
+                <!-- User info and buttons will be rendered here -->
+            </div>
         </div>
     </nav>
 
@@ -36,37 +49,41 @@
 
         <div id="flashMessage" class="hidden p-4 mb-4 rounded-lg text-sm"></div>
 
-        <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            <div class="bg-white p-4 shadow rounded-lg text-center">
-                <p class="text-sm text-gray-500">Total Member Aktif</p>
-                <p id="statTotalMembers" class="text-2xl font-bold">0</p>
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <!-- Total Members Card -->
+            <div class="bg-gray-800/40 p-6 rounded-2xl shadow-xl border border-gray-700 backdrop-blur-sm text-center">
+                <p class="text-sm text-gray-400">Total Member Aktif</p>
+                <p id="statTotalMembers" class="text-3xl font-bold text-gray-50 mt-1">0</p>
             </div>
-                <div class="bg-white p-4 shadow rounded-lg text-center">
-                    <p class="text-sm text-gray-500">Member Online</p>
-                    <p id="statOnlineMembers" class="text-2xl font-bold text-teal-600">0</p>
-                </div>
-            <div class="bg-white p-4 shadow rounded-lg text-center">
-                <p class="text-sm text-gray-500">Mengikutimu</p>
-                <p id="statYouAreFollowing" class="text-2xl font-bold text-blue-600">0</p>
+            <!-- Online Members Card -->
+            <div class="bg-gray-800/40 p-6 rounded-2xl shadow-xl border border-gray-700 backdrop-blur-sm text-center">
+                <p class="text-sm text-gray-400">Member Online</p>
+                <p id="statOnlineMembers" class="text-3xl font-bold text-teal-400 mt-1">0</p>
             </div>
-            <div class="bg-white p-4 shadow rounded-lg text-center">
-                <p class="text-sm text-gray-500">Kamu mengikuti</p>
-                <p id="statFollowingYou" class="text-2xl font-bold text-green-600">0</p>
+            <!-- You Are Following Card -->
+            <div class="bg-gray-800/40 p-6 rounded-2xl shadow-xl border border-gray-700 backdrop-blur-sm text-center">
+                <p class="text-sm text-gray-400">Kamu Mengikuti</p>
+                <p id="statYouAreFollowing" class="text-3xl font-bold text-emerald-400 mt-1">0</p>
+            </div>
+            <!-- Following You Card -->
+            <div class="bg-gray-800/40 p-6 rounded-2xl shadow-xl border border-gray-700 backdrop-blur-sm text-center">
+                <p class="text-sm text-gray-400">Mengikutimu</p>
+                <p id="statFollowingYou" class="text-3xl font-bold text-cyan-400 mt-1">0</p>
             </div>
         </section>
 
-
         <div class="mb-4 flex justify-between items-center flex-wrap gap-2">
-            <h2 class="text-lg font-semibold text-gray-800">📋 Daftar Anggota</h2>
+            <h2 class="text-xl font-semibold text-gray-50">📋 Daftar Anggota</h2>
             <div class="flex gap-2">
-                <button id="filterAll" class="filter-btn px-3 py-1 rounded bg-gray-200 text-sm filter-btn-active">Semua</button>
-                <button id="filterNotFollback" class="filter-btn px-3 py-1 rounded bg-gray-200 text-sm">Belum Follback</button>
+                <button id="filterAll" class="filter-btn px-4 py-2 rounded-lg bg-gray-700/50 text-gray-300 text-sm transition filter-btn-active">Semua</button>
+                <button id="filterNotFollback" class="filter-btn px-4 py-2 rounded-lg bg-gray-700/50 text-gray-300 text-sm transition">Belum Follback</button>
             </div>
         </div>
 
+        <!-- Desktop Table View -->
         <div class="hidden sm:block overflow-x-auto">
-            <table class="w-full bg-white shadow rounded-lg">
-                <thead class="bg-gray-200 text-sm text-gray-700 uppercase">
+            <table class="w-full bg-gray-800/40 shadow-xl rounded-2xl border border-gray-700 backdrop-blur-sm">
+                <thead class="bg-gray-700/50 text-sm text-gray-200 uppercase">
                     <tr>
                         <th class="px-4 py-3 text-left">Username</th>
                         <th class="px-4 py-3 text-center">No. WA</th>
@@ -75,55 +92,82 @@
                         <th class="px-4 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody id="tableBody" class="text-gray-700"></tbody>
+                <tbody id="tableBody" class="text-gray-300">
+                    <!-- Table rows will be dynamically inserted here -->
+                </tbody>
             </table>
         </div>
 
-        <div id="mobileList" class="sm:hidden grid grid-cols-1 gap-4"></div>
+        <!-- Mobile Card View -->
+        <div id="mobileList" class="sm:hidden grid grid-cols-1 gap-4">
+            <!-- Mobile cards will be dynamically inserted here -->
+        </div>
 
     </main>
     
-    <footer class="mt-10 mb-6 text-center text-gray-500 text-sm">
-        &copy; <span id="currentYear"></span> Mutualan TikTok
+    <footer class="mt-10 mb-6 text-center text-gray-400 text-sm">
+        &copy; <span id="currentYear"></span> Saling Follow TikTok
     </footer>
 
-    <script>
-        // --- !!! PERINGATAN KEAMANAN !!! ---
-        // JANGAN PERNAH MENARUH API KEY DAN KONFIGURASI SENSITIF LANGSUNG DI KODE CLIENT-SIDE
-        // YANG AKAN DIPUBLIKASIKAN. Gunakan Firebase Hosting dengan konfigurasi otomatis atau
-        // Environment Variables untuk melindungi kredensial Anda.
-        const firebaseConfig = {
-        apiKey: "AIzaSyDcgwRAwrLHKhtTmcmWucb1z3qTqbW0nbU",
-        authDomain: "saling-follow.firebaseapp.com",
-        databaseURL: "https://saling-follow-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "saling-follow",
-        storageBucket: "saling-follow.firebasestorage.app",
-        messagingSenderId: "1094414083730",
-        appId: "1:1094414083730:web:d92a44972e226a5429284b",
-        measurementId: "G-N3S79LL85E"
-        };
+    <!-- Custom Modal for Confirmations -->
+    <div id="customModal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+      <div class="bg-gray-800 rounded-lg p-6 shadow-xl w-full max-w-sm border border-gray-700">
+        <p id="modalMessage" class="text-gray-50 text-center mb-6 text-lg"></p>
+        <div class="flex justify-center gap-4">
+          <button id="modalConfirmBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2 rounded-lg transition">Ya</button>
+          <button id="modalCancelBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-5 py-2 rounded-lg transition">Batal</button>
+        </div>
+      </div>
+    </div>
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.database();
+    <script type="module">
+        // Import modul Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getDatabase, ref, set, update, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        // Global variables provided by Canvas environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : `{
+        "apiKey": "AIzaSyDcgwRAwrLHKhtTmcmWucb1z3qTqbW0nbU",
+        "authDomain": "saling-follow.firebaseapp.com",
+        "databaseURL": "https://saling-follow-default-rtdb.asia-southeast1.firebasedatabase.app",
+        "projectId": "saling-follow",
+        "storageBucket": "saling-follow.firebasestorage.app",
+        "messagingSenderId": "1094414083730",
+        "appId": "1:1094414083730:web:d92a44972e226a5429284b",
+        "measurementId": "G-N3S79LL85E"
+        }`);
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Inisialisasi Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
 
         // DOM Elements
         const navUserSection = document.getElementById("navUserSection");
         const flashMessage = document.getElementById("flashMessage");
         const statTotalMembers = document.getElementById("statTotalMembers");
+        const statOnlineMembers = document.getElementById("statOnlineMembers");
         const statYouAreFollowing = document.getElementById("statYouAreFollowing");
         const statFollowingYou = document.getElementById("statFollowingYou");
         const tableBody = document.getElementById("tableBody");
         const mobileList = document.getElementById("mobileList");
         const currentYear = document.getElementById("currentYear");
         const filterButtons = document.querySelectorAll(".filter-btn");
-        const statOnlineMembers = document.getElementById("statOnlineMembers");
+
+        // Modal Elements
+        const customModal = document.getElementById('customModal');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+        const modalCancelBtn = document.getElementById('modalCancelBtn');
 
         // App State
         let currentUserData = null;
         let allUsersData = {};
         let activeFilter = "all";
+        let modalResolve = null; // Untuk menyimpan resolve promise modal
 
         // Global references to store active listeners for cleanup
         let currentUserRef = null;
@@ -138,13 +182,13 @@
             flashMessage.textContent = text;
             flashMessage.className = "p-4 mb-4 rounded-lg text-sm"; // Reset classes
             if (type === "success") {
-                flashMessage.classList.add("bg-green-100", "text-green-800");
+                flashMessage.classList.add("bg-green-700/50", "text-green-200");
             } else if (type === "warning") {
-                flashMessage.classList.add("bg-yellow-100", "text-yellow-800");
-            } else if (type === "info") { // Added for general info messages
-                flashMessage.classList.add("bg-blue-100", "text-blue-800");
-            } else {
-                flashMessage.classList.add("bg-red-100", "text-red-800");
+                flashMessage.classList.add("bg-yellow-700/50", "text-yellow-200");
+            } else if (type === "info") {
+                flashMessage.classList.add("bg-blue-700/50", "text-blue-200");
+            } else { // error
+                flashMessage.classList.add("bg-red-700/50", "text-red-200");
             }
             flashMessage.classList.remove("hidden");
             setTimeout(() => {
@@ -152,13 +196,40 @@
             }, 4000);
         }
 
+        // Custom Modal Function
+        function showCustomModal(message) {
+            modalMessage.textContent = message;
+            customModal.classList.remove('hidden');
+            return new Promise((resolve) => {
+                modalResolve = resolve;
+            });
+        }
+
+        function hideCustomModal() {
+            customModal.classList.add('hidden');
+            modalResolve = null;
+        }
+
+        modalConfirmBtn.addEventListener('click', () => {
+            if (modalResolve) modalResolve(true);
+            hideCustomModal();
+        });
+
+        modalCancelBtn.addEventListener('click', () => {
+            if (modalResolve) modalResolve(false);
+            hideCustomModal();
+        });
+
         // --- UI UPDATE FUNCTIONS ---
         function updateNavUser() {
             if (!currentUserData) return;
+            // Ensure userId is displayed for multi-user apps
+            const userIdDisplay = auth.currentUser?.uid || 'Anonim'; // Fallback for anonymous
             navUserSection.innerHTML = `
-                <span class="text-gray-700">Hi, <strong>${currentUserData.username}</strong></span>
-                <button id="leaderboardBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded text-sm">🏆 Leaderboard</button>
-                <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">Logout</button>
+                <span class="text-gray-300">Hi, <strong>${currentUserData.username}</strong></span>
+                <span class="text-gray-400 text-xs">(ID: ${userIdDisplay.substring(0, 8)}...)</span>
+                <button id="leaderboardBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-lg text-sm font-semibold transition">🏆 Leaderboard</button>
+                <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm font-semibold transition">Logout</button>
             `;
         }
         
@@ -180,9 +251,9 @@
             }
             
             if (filteredUsers.length === 0) {
-                const emptyMessage = `<tr class="border-t"><td colspan="5" class="text-center py-8 text-gray-500">Tidak ada anggota untuk ditampilkan.</td></tr>`;
+                const emptyMessage = `<tr class="border-t border-gray-700"><td colspan="5" class="text-center py-8 text-gray-500">Tidak ada anggota untuk ditampilkan.</td></tr>`;
                 tableBody.innerHTML = emptyMessage;
-                mobileList.innerHTML = `<div class="bg-white rounded-lg shadow p-4 text-center text-gray-500">Tidak ada anggota untuk ditampilkan.</div>`;
+                mobileList.innerHTML = `<div class="bg-gray-800/40 rounded-2xl shadow-xl p-6 text-center text-gray-400 border border-gray-700 backdrop-blur-sm">Tidak ada anggota untuk ditampilkan.</div>`;
                 return;
             }
 
@@ -191,11 +262,11 @@
                 
                 // For Desktop Table
                 const tr = document.createElement("tr");
-                tr.className = "border-t hover:bg-gray-50";
+                tr.className = "border-t border-gray-700 hover:bg-gray-700/30 transition";
                 tr.innerHTML = `
                     <td class="px-4 py-3">${user.username}</td>
-                    <td class="px-4 py-3 text-center">${user.whatsapp || "-"}</td>
-                    <td class="px-4 py-3 text-center">${user.trust_score || 0}</td>
+                    <td class="px-4 py-3 text-center text-gray-400">${user.whatsapp || "-"}</td>
+                    <td class="px-4 py-3 text-center text-gray-200 font-semibold">${user.trust_score || 0}</td>
                     <td class="px-4 py-3 text-center text-xs">${statusLabel}</td>
                     <td class="px-4 py-3 text-center">${actionsHTML}</td>
                 `;
@@ -203,17 +274,17 @@
 
                 // For Mobile Cards
                 const card = document.createElement("div");
-                card.className = "bg-white rounded-lg shadow p-4";
+                card.className = "bg-gray-800/40 rounded-2xl shadow-xl p-6 border border-gray-700 backdrop-blur-sm";
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div>
-                            <h3 class="text-lg font-semibold">${user.username}</h3>
-                            <p class="text-sm text-gray-500">${user.whatsapp || "-"}</p>
-                            <p class="text-sm mt-1">Skor: <span class="font-bold">${user.trust_score || 0}</span></p>
+                            <h3 class="text-lg font-semibold text-gray-50">${user.username}</h3>
+                            <p class="text-sm text-gray-400">${user.whatsapp || "-"}</p>
+                            <p class="text-sm mt-1 text-gray-300">Skor: <span class="font-bold">${user.trust_score || 0}</span></p>
                         </div>
                         <div class="text-right text-xs shrink-0 ml-2">${statusLabel}</div>
                     </div>
-                    <div class="mt-4 pt-3 border-t flex gap-2 flex-wrap">${actionsHTML}</div>
+                    <div class="mt-4 pt-3 border-t border-gray-700 flex gap-2 flex-wrap">${actionsHTML}</div>
                 `;
                 mobileList.appendChild(card);
             });
@@ -223,31 +294,31 @@
             const youFollowThem = currentUserData.following && currentUserData.following[otherUser.id];
             const theyFollowYou = currentUserData.followers && currentUserData.followers[otherUser.id];
 
-            let statusLabel = "-";
+            let statusLabel = `<span class="text-gray-500">Belum Follow</span>`;
             let actionsHTML = "";
 
             if (youFollowThem === "confirmed" && theyFollowYou === "confirmed") {
-                statusLabel = `<span class="font-bold text-green-600">Saling Follow</span>`;
-                actionsHTML = `<button data-action="unfollow" data-user-id="${otherUser.id}" class="bg-gray-400 hover:bg-gray-500 text-white px-3 py-1 rounded text-sm">Unfollow</button>`;
+                statusLabel = `<span class="font-bold text-emerald-400">Saling Follow</span>`;
+                actionsHTML = `<button data-action="unfollow" data-user-id="${otherUser.id}" class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded-lg text-sm font-medium transition">Unfollow</button>`;
             
             } else if (theyFollowYou === "pending") {
-                statusLabel = `<span class="font-bold text-blue-600">Telah Follow Anda</span><br><span class="text-gray-500 text-xs">(Verifikasi & Follback)</span>`;
+                statusLabel = `<span class="font-bold text-cyan-400">Telah Follow Anda</span><br><span class="text-gray-500 text-xs">(Verifikasi & Follback)</span>`;
                 actionsHTML = `
-                    <a href="https://www.tiktok.com/@${otherUser.username}" target="_blank" rel="noopener noreferrer" class="inline-block bg-sky-500 hover:bg-sky-600 text-white px-3 py-1 rounded text-sm font-medium align-middle">Cek Profil</a>
-                    <button data-action="confirmFollback" data-user-id="${otherUser.id}" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">Sudah Follback</button>
-                    <button data-action="rejectFollback" data-user-id="${otherUser.id}" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm" title="Klik jika sudah dicek dan ternyata belum follow">Tolak</button>
+                    <a href="https://www.tiktok.com/@${otherUser.username}" target="_blank" rel="noopener noreferrer" class="inline-block bg-sky-600 hover:bg-sky-700 text-white px-3 py-1 rounded-lg text-sm font-medium align-middle transition">Cek Profil</a>
+                    <button data-action="confirmFollback" data-user-id="${otherUser.id}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-lg text-sm font-medium transition">Sudah Follback</button>
+                    <button data-action="rejectFollback" data-user-id="${otherUser.id}" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm font-medium transition" title="Klik jika sudah dicek dan ternyata belum follow">Tolak</button>
                 `;
 
             } else if (youFollowThem === "pending") {
-                statusLabel = `<span class="font-bold text-yellow-600">Menunggu Follback</span>`;
+                statusLabel = `<span class="font-bold text-yellow-400">Menunggu Follback</span>`;
                 actionsHTML = `<span class="text-gray-500 italic text-sm p-1">Menunggu...</span>`;
             
             } else if (youFollowThem === "confirmed") {
-                statusLabel = `<span class="text-gray-600">Anda Follow</span>`;
-                actionsHTML = `<button data-action="unfollow" data-user-id="${otherUser.id}" class="bg-gray-400 hover:bg-gray-500 text-white px-3 py-1 rounded text-sm">Unfollow</button>`;
+                statusLabel = `<span class="text-gray-400">Anda Follow</span>`;
+                actionsHTML = `<button data-action="unfollow" data-user-id="${otherUser.id}" class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded-lg text-sm font-medium transition">Unfollow</button>`;
             
             } else { // Default state: you haven't followed them
-                actionsHTML = `<button data-action="requestFollow" data-user-id="${otherUser.id}" data-username="${otherUser.username}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">Follow</button>`;
+                actionsHTML = `<button data-action="requestFollow" data-user-id="${otherUser.id}" data-username="${otherUser.username}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm font-medium transition">Follow</button>`;
             }
             
             return { statusLabel, actionsHTML };
@@ -268,23 +339,24 @@
         // --- FIREBASE DATA LISTENERS ---
         // This function will set up real-time listeners for user data
         function setupRealtimeListeners(user) {
-            // Clear any existing listeners first to prevent duplicates if auth state changes multiple times
-            // (though onAuthStateChanged should only fire once on initial load and then on sign in/out)
-            if (currentUserRef) currentUserRef.off();
-            if (allUsersRef) allUsersRef.off();
-            if (presenceRef) presenceRef.off();
-            if (connectedRef) connectedRef.off();
+            // Clear any existing listeners first to prevent duplicates
+            if (currentUserRef) onValue(currentUserRef, () => {}); // Detach previous listener
+            if (allUsersRef) onValue(allUsersRef, () => {}); // Detach previous listener
+            if (presenceRef) onValue(presenceRef, () => {}); // Detach previous listener
+            if (connectedRef) onValue(connectedRef, () => {}); // Detach previous listener
 
-            currentUserRef = db.ref(`users/${user.uid}`);
-            allUsersRef = db.ref("users");
-            presenceRef = db.ref('/presence');
-            connectedRef = db.ref('.info/connected');
+            // Paths for modular SDK
+            currentUserRef = ref(db, `artifacts/${appId}/users/${user.uid}/profile`);
+            allUsersRef = ref(db, `artifacts/${appId}/public/data/users`);
+            presenceRef = ref(db, `artifacts/${appId}/public/data/presence`);
+            const userStatusDatabaseRef = ref(db, `artifacts/${appId}/public/data/presence/${user.uid}`);
+            connectedRef = ref(db, '.info/connected');
 
             // Listener for current user's data
-            currentUserRef.on("value", snapshot => {
+            onValue(currentUserRef, snapshot => {
                 if (!snapshot.exists()) {
                     showFlashMessage("Data pengguna tidak ditemukan. Sesi Anda akan diakhiri.", "error");
-                    auth.signOut();
+                    signOut(auth);
                     return;
                 }
                 currentUserData = { id: user.uid, ...snapshot.val() };
@@ -294,7 +366,7 @@
             });
 
             // Listener for all users data
-            allUsersRef.on("value", snapshot => {
+            onValue(allUsersRef, snapshot => {
                 allUsersData = snapshot.val() || {};
                 // Add id to each user object
                 for (const id in allUsersData) {
@@ -305,58 +377,36 @@
             });
 
             // Presence system
-            const userStatusDatabaseRef = db.ref('/presence/' + user.uid);
-            
-            presenceRef.on('value', snapshot => {
-                const onlineCount = snapshot.numChildren();
+            onValue(presenceRef, snapshot => {
+                const onlineCount = snapshot.size; // Use .size for modular SDK
                 statOnlineMembers.textContent = onlineCount;
             });
 
-            connectedRef.on('value', snapshot => {
+            onValue(connectedRef, snapshot => {
                 if (snapshot.val() === false) {
                     return;
                 }
-                userStatusDatabaseRef.onDisconnect().remove()
+                // When connected, remove user from presence when disconnected
+                set(userStatusDatabaseRef.onDisconnect(), null)
                     .then(() => {
-                        userStatusDatabaseRef.set(true);
-                    });
-            });
-        }
-
-        function loadAllData() {
-            console.log("Memulai loadAllData");
-            db.ref("users").once("value").then(snapshot => {
-                allUsersData = snapshot.val() || {};
-                console.log("Data user yang diterima:", allUsersData);
-                
-                for (const id in allUsersData) {
-                    allUsersData[id].id = id;
-                }
-                
-                if (auth.currentUser) {
-                    currentUserData = allUsersData[auth.currentUser.uid];
-                    if (currentUserData) {
-                        currentUserData.id = auth.currentUser.uid;
-                        console.log("Current user data:", currentUserData);
-                    }
-                }
-                
-                updateStats();
-                renderMembers();
-            }).catch(err => {
-                console.error("Error loadAllData:", err);
+                        set(userStatusDatabaseRef, true); // Set user as online
+                    })
+                    .catch(err => console.error("Error setting presence on connect:", err));
             });
         }
 
         // --- FIREBASE DATA FUNCTIONS ---
-        function handleFollowRequest(otherUserId, otherUsername) {
+        async function handleFollowRequest(otherUserId, otherUsername) {
+            const confirmed = await showCustomModal(`Anda akan diarahkan ke profil TikTok @${otherUsername}. Setelah follow, klik "Ya" untuk mengkonfirmasi.`);
+            if (!confirmed) return;
+
             window.open(`https://www.tiktok.com/@${otherUsername}`, '_blank', 'noopener,noreferrer');
             
             const updates = {};
-            updates[`/users/${currentUserData.id}/following/${otherUserId}`] = "pending";
-            updates[`/users/${otherUserId}/followers/${currentUserData.id}`] = "pending";
+            updates[`artifacts/${appId}/users/${currentUserData.id}/profile/following/${otherUserId}`] = "pending";
+            updates[`artifacts/${appId}/public/data/users/${otherUserId}/followers/${currentUserData.id}`] = "pending";
 
-            db.ref().update(updates)
+            update(ref(db), updates)
                 .then(() => {
                     showFlashMessage("Permintaan follow terkirim! Menunggu konfirmasi dari mereka.", "success");
                     // UI will update automatically via listeners
@@ -364,15 +414,15 @@
                 .catch(err => showFlashMessage(`Error: ${err.message}`, "error"));
         }
 
-        function handleUnfollow(otherUserId) {
-            // NOTE: In a production app, you would replace `confirm` with a custom modal for better UX.
-            if (!confirm("Yakin mau berhenti mengikuti pengguna ini?")) return;
+        async function handleUnfollow(otherUserId) {
+            const confirmed = await showCustomModal("Yakin mau berhenti mengikuti pengguna ini?");
+            if (!confirmed) return;
 
             const updates = {};
-            updates[`/users/${currentUserData.id}/following/${otherUserId}`] = null; // null for deletion
-            updates[`/users/${otherUserId}/followers/${currentUserData.id}`] = null;
+            updates[`artifacts/${appId}/users/${currentUserData.id}/profile/following/${otherUserId}`] = null; // null for deletion
+            updates[`artifacts/${appId}/public/data/users/${otherUserId}/followers/${currentUserData.id}`] = null;
 
-            db.ref().update(updates)
+            update(ref(db), updates)
                 .then(() => {
                     showFlashMessage("Berhasil berhenti mengikuti.", "success");
                     // UI will update automatically via listeners
@@ -380,66 +430,68 @@
                 .catch(err => showFlashMessage(`Error: ${err.message}`, "error"));
         }
 
-       // GANTI FUNGSI LAMA INI DI KODE ANDA
-            function handleConfirmFollback(otherUserId) {
-                if (!confirm("Konfirmasi bahwa Anda sudah follow balik pengguna ini? Ini akan membuat status menjadi 'Saling Follow'.")) return;
+        async function handleConfirmFollback(otherUserId) {
+            const confirmed = await showCustomModal("Konfirmasi bahwa Anda sudah follow balik pengguna ini? Ini akan membuat status menjadi 'Saling Follow'.");
+            if (!confirmed) return;
 
-                const updates = {};
-                // Buat status menjadi saling follow (confirmed) di semua jalur relasi
-                updates[`/users/${currentUserData.id}/following/${otherUserId}`] = "confirmed";
-                updates[`/users/${currentUserData.id}/followers/${otherUserId}`] = "confirmed";
-                updates[`/users/${otherUserId}/followers/${currentUserData.id}`] = "confirmed";
-                updates[`/users/${otherUserId}/following/${currentUserData.id}`] = "confirmed";
+            const updates = {};
+            // Buat status menjadi saling follow (confirmed) di semua jalur relasi
+            updates[`artifacts/${appId}/users/${currentUserData.id}/profile/following/${otherUserId}`] = "confirmed";
+            updates[`artifacts/${appId}/users/${currentUserData.id}/profile/followers/${otherUserId}`] = "confirmed"; // Update current user's local follower status
+            updates[`artifacts/${appId}/public/data/users/${otherUserId}/followers/${currentUserData.id}`] = "confirmed";
+            updates[`artifacts/${appId}/public/data/users/${otherUserId}/following/${currentUserData.id}`] = "confirmed"; // Update other user's local following status
 
-                db.ref().update(updates)
-                    .then(() => {
-                        showFlashMessage("Follback berhasil! Kalian sekarang saling follow.", "success");
-                        loadAllData();
-                    })
-                    .catch(err => showFlashMessage(`Error: ${err.message}`, "error"));
-            }
+            update(ref(db), updates)
+                .then(() => {
+                    showFlashMessage("Follback berhasil! Kalian sekarang saling follow.", "success");
+                    // UI will update automatically via listeners
+                })
+                .catch(err => showFlashMessage(`Error: ${err.message}`, "error"));
+        }
 
-        // GANTI JUGA FUNGSI LAMA INI
-        function handleRejectFollback(otherUserId) {
-            if (!confirm("Yakin menolak permintaan follow ini? (Gunakan jika mereka ternyata tidak mem-follow Anda)")) return;
+        async function handleRejectFollback(otherUserId) {
+            const confirmed = await showCustomModal("Yakin menolak permintaan follow ini? (Gunakan jika mereka ternyata tidak mem-follow Anda)");
+            if (!confirmed) return;
             
             const updates = {};
             // Hapus relasi dari kedua sisi agar data bersih
-            updates[`/users/${currentUserData.id}/followers/${otherUserId}`] = null; // Hapus dari daftar follower saya
-            updates[`/users/${otherUserId}/following/${currentUserData.id}`] = null; // Hapus dari daftar 'following' mereka
+            updates[`artifacts/${appId}/users/${currentUserData.id}/profile/followers/${otherUserId}`] = null; // Hapus dari daftar follower saya
+            updates[`artifacts/${appId}/public/data/users/${otherUserId}/following/${currentUserData.id}`] = null; // Hapus dari daftar 'following' mereka
 
-            db.ref().update(updates)
+            update(ref(db), updates)
             .then(() => {
-                    showFlashMessage("Permintaan follow ditolak.", "warning");
-                    loadAllData();
-                })
+                showFlashMessage("Permintaan follow ditolak.", "warning");
+                // UI will update automatically via listeners
+            })
             .catch(err => showFlashMessage(`Error: ${err.message}`, "error"));
         }
-                // --- AUTH STATE CHANGE HANDLER ---
-                auth.onAuthStateChanged(user => {
-                    // First, remove any existing listeners to prevent duplicates or issues on sign-out/in
-                    if (currentUserRef) currentUserRef.off();
-                    if (allUsersRef) allUsersRef.off();
-                    if (presenceRef) presenceRef.off();
-                    if (connectedRef) connectedRef.off();
 
-                    if (user) {
-                        // User is signed in.
-                        setupRealtimeListeners(user);
-                    } else {
-                        // User is signed out.
-                        currentUserData = null;
-                        allUsersData = {};
-                        sessionStorage.clear();
-                        window.location.href = "login.html";
-                    }
-                });
+        // --- AUTH STATE CHANGE HANDLER ---
+        onAuthStateChanged(auth, user => {
+            // First, remove any existing listeners to prevent duplicates or issues on sign-out/in
+            if (currentUserRef) onValue(currentUserRef, () => {});
+            if (allUsersRef) onValue(allUsersRef, () => {});
+            if (presenceRef) onValue(presenceRef, () => {});
+            if (connectedRef) onValue(connectedRef, () => {});
+
+            if (user) {
+                // User is signed in.
+                setupRealtimeListeners(user);
+            } else {
+                // User is signed out.
+                currentUserData = null;
+                allUsersData = {};
+                // Clear any session storage if used for auth state
+                sessionStorage.clear(); // Uncomment if you are using session storage
+                window.location.href = "login.html"; // Redirect to login page
+            }
+        });
 
         // --- EVENT LISTENERS ---
         document.addEventListener('click', function(e) {
             // Logout and Leaderboard buttons in nav
             if (e.target.id === 'logoutBtn') {
-                auth.signOut();
+                signOut(auth);
             }
             if (e.target.id === 'leaderboardBtn') {
                 showFlashMessage("Fitur Leaderboard segera hadir!", "info");

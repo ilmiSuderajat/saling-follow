@@ -3,18 +3,87 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login TikTok F4F</title>
+  <title>Login Saling Follow TikTok</title>
+  <!-- Link ke font Inter dari Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Mengatur font Inter sebagai font default */
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-  <div class="bg-white p-6 rounded-xl shadow-xl w-full max-w-sm">
-    <h2 class="text-2xl font-bold text-center mb-4">Login</h2>
- <form id="loginForm" class="space-y-4">
-  <input type="email" id="email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg" required />
-  <input type="password" id="password" placeholder="Password" class="w-full px-4 py-2 border rounded-lg" required />
-  <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Login</button>
-</form>
-<p id="status" class="text-sm text-center mt-4 text-red-600"></p>
+<body class="bg-gradient-to-br from-gray-950 to-blue-950 min-h-screen flex items-center justify-center p-4">
+  <!-- Kontainer utama dengan latar belakang transparan gelap -->
+  <div class="bg-gray-900/40 p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-700 backdrop-blur-md">
+    <h2 class="text-3xl font-bold text-center text-gray-50 mb-8 flex items-center justify-center gap-3">
+      <!-- TikTok Logo SVG - Warna fill diatur secara eksplisit ke putih -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 448 512"
+        class="h-8 w-8"
+        fill="#FFFFFF"
+      >
+        <!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. -->
+        <path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V276a162.6 162.6 0 1 0 101.5 142.4V224.1c4.5 7.4 9.1 15.2 13.6 23.4l5.3 9.7L448 209.9z"/>
+      </svg>
+      Login Saling Follow
+    </h2>
+
+    <form id="loginForm" class="space-y-6">
+      <!-- Input Email -->
+      <div class="relative">
+        <input
+          type="email"
+          id="email"
+          placeholder=" "
+          class="peer w-full px-4 py-3 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition duration-200 placeholder-transparent text-gray-200 bg-gray-800/50"
+          required
+        />
+        <label
+          for="email"
+          class="absolute left-4 -top-3.5 text-gray-400 text-sm bg-gray-900/0 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-teal-300 peer-focus:text-sm transition-all duration-200"
+        >
+          Email
+        </label>
+      </div>
+
+      <!-- Input Password -->
+      <div class="relative">
+        <input
+          type="password"
+          id="password"
+          placeholder=" "
+          class="peer w-full px-4 py-3 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition duration-200 placeholder-transparent text-gray-200 bg-gray-800/50"
+          required
+        />
+        <label
+          for="password"
+          class="absolute left-4 -top-3.5 text-gray-400 text-sm bg-gray-900/0 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-teal-300 peer-focus:text-sm transition-all duration-200"
+        >
+          Password
+        </label>
+      </div>
+
+      <!-- Tombol Login -->
+      <button
+        type="submit"
+        class="w-full bg-gradient-to-r from-emerald-500 to-cyan-600 text-white font-semibold py-3 rounded-xl shadow-lg hover:from-emerald-600 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition duration-300 transform hover:scale-105"
+      >
+        Login
+      </button>
+    </form>
+
+    <p id="status" class="text-sm text-center mt-6 text-red-400 font-medium"></p>
+
+    <!-- Link ke halaman Pendaftaran -->
+    <p class="text-sm text-center text-gray-400 mt-5">
+      Belum punya akun? <a href="index.html" class="text-teal-400 hover:text-teal-300 font-semibold underline transition duration-200">Daftar di sini</a>
+    </p>
+  </div>
+
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -32,22 +101,35 @@
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
 
-  document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
+   document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault(); // Mencegah form submit secara default
 
-    try {
-      await auth.signInWithEmailAndPassword(email, password);
-      window.location.href = "dashboard.html";
-    } catch (error) {
-      document.getElementById('status').textContent = "Login gagal: " + error.message;
-    }
+      // Mengambil nilai dari input form
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const statusMessage = document.getElementById('status');
+
+      try {
+        // Melakukan login pengguna dengan email dan password menggunakan Firebase Authentication
+        await auth.signInWithEmailAndPassword(email, password);
+
+        // Menampilkan pesan sukses
+        statusMessage.textContent = "Login berhasil! Mengarahkan ke dashboard...";
+        statusMessage.classList.remove('text-red-400');
+        statusMessage.classList.add('text-green-400');
+        document.getElementById('loginForm').reset();
+        // Anda bisa mengarahkan pengguna ke halaman lain setelah login berhasil
+         setTimeout(() => {
+         window.location.href = 'dashboard.html'; // Contoh: Arahkan ke halaman dashboard
+        }, 2000);
+      } catch (error) {
+        // Menampilkan pesan error jika login gagal
+        statusMessage.textContent = "Login gagal: " + error.message;
+        statusMessage.classList.remove('text-green-400');
+        statusMessage.classList.add('text-red-400');
+        console.error("Login error:", error);
+      }
   });
 </script>
-    <p class="text-sm text-center mt-2">
-        Belum punya akun? <a href="index.html" class="text-blue-500 underline">Daftar</a>
-    </p>
-    </div>
 </body>
 </html>
